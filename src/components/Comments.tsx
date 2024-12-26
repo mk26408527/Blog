@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback} from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 interface Comment {
   id: number;
@@ -15,28 +16,30 @@ interface Comment {
 }
 
 interface CommentSectionProps {
-    postId: number;
-    initialComments?: Comment[];
-    userName: string;
+  postId: number;
+  initialComments?: Comment[];
 }
 
-export function CommentSection({ initialComments = [], userName }: CommentSectionProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function CommentSection({ postId, initialComments = [] }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState('');
+  const [newAuthor, setNewAuthor] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editedContent, setEditedContent] = useState('');
 
   const handleSubmitComment = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newComment.trim()) {
+    if (newComment.trim() && newAuthor.trim()) {
       const comment: Comment = {
         id: Date.now(),
-        author: userName || 'Anonymous User', 
+        author: newAuthor.trim(),
         content: newComment.trim(),
         createdAt: new Date().toISOString(),
       };
       setComments([...comments, comment]);
       setNewComment('');
+      setNewAuthor('');
     }
   };
 
@@ -64,12 +67,28 @@ export function CommentSection({ initialComments = [], userName }: CommentSectio
     <div className="mt-8 space-y-6 max-w-4xl mx-auto px-4">
       <h2 className="text-2xl font-bold mb-4">Comments</h2>
       <form onSubmit={handleSubmitComment} className="space-y-4">
-        <Textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Add a comment..."
-          className="w-full"
-        />
+        <div>
+          <Label htmlFor="author">Your Name</Label>
+          <Input
+            id="author"
+            value={newAuthor}
+            onChange={(e) => setNewAuthor(e.target.value)}
+            placeholder="Enter your name"
+            className="w-full mt-1"
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="comment">Your Comment</Label>
+          <Textarea
+            id="comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Add a comment..."
+            className="w-full mt-1"
+            required
+          />
+        </div>
         <Button type="submit">Post Comment</Button>
       </form>
       <div className="space-y-4">
@@ -78,7 +97,7 @@ export function CommentSection({ initialComments = [], userName }: CommentSectio
             <CardContent className="p-4">
               <div className="flex items-start space-x-4">
                 <Avatar>
-                  <AvatarFallback>{comment.author[0]}</AvatarFallback>
+                  <AvatarFallback>{comment.author[0].toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
@@ -102,12 +121,10 @@ export function CommentSection({ initialComments = [], userName }: CommentSectio
                   ) : (
                     <p className="mt-1">{comment.content}</p>
                   )}
-                  {editingCommentId !== comment.id && (
-                    <div className="mt-2 space-x-2">
-                      <Button onClick={() => handleEditComment(comment.id)} variant="outline" size="sm">Edit</Button>
-                      <Button onClick={() => handleDeleteComment(comment.id)} variant="destructive" size="sm">Delete</Button>
-                    </div>
-                  )}
+                  <div className="mt-2 space-x-2">
+                    <Button onClick={() => handleEditComment(comment.id)} variant="outline" size="sm">Edit</Button>
+                    <Button onClick={() => handleDeleteComment(comment.id)} variant="destructive" size="sm">Delete</Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -117,3 +134,4 @@ export function CommentSection({ initialComments = [], userName }: CommentSectio
     </div>
   );
 }
+

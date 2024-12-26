@@ -133,12 +133,12 @@ export default function Page({ params }: { params: { slug: string } }) {
         </CardContent>
         <CardFooter>
           <Button asChild>
-            <Link href="/blogpost">Back to Blog List</Link>
+            <Link href="/blogpost">Back to Blogs</Link>
           </Button>
         </CardFooter>
       </Card>
     </div>
-    <CommentSection postId={0} initialComments={[]} userName={''} />
+    <CommentSection postId={1} initialComments={[]} />
     </main>
 );
 }

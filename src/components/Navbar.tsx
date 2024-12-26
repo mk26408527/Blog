@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-background text-foreground px-4 py-2 fixed w-full z-10 shadow-sm">
+    <nav className="bg-background text-foreground px-4 py-2 w-full z-10 shadow-sm">
       <div className="container mx-auto flex items-center justify-between max-w-screen-xl">
         {/* Left Section */}
         <Link href="/" className="text-2xl font-bold font-custom">
