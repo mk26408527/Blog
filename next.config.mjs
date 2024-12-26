@@ -1,4 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+// next.config.mjs
 
-export default nextConfig;
+const nextConfig = {
+    images: {
+      domains: ['creative-blog.vercel.app'], // Add the domain of the external image source
+    },
+  };
+  
+  export default nextConfig;
+  
